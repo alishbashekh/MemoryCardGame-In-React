@@ -1,9 +1,10 @@
 
-import React from 'react'
-
-const Card = () => {
+const Card = ({card}) => {
+  const Icon = card.value;
   return (
-    <h1>this is single card</h1>
+    <div className="w-24 h-24 rounded-lg bg-white flex items-center justify-center shadow">
+      <Icon size = {40}/>
+    </div>
   )
 }
 
