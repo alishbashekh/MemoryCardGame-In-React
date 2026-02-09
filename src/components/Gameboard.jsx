@@ -38,7 +38,7 @@ const Gameboard = () => {
     <div className='grid grid-cols-4 gap-4'>
        {paircards.map((card, index)=>(
       
-        <Card key={id} card={card}/>
+        <Card key={card.id} card={card}/>
        ))}
     </div>
   
