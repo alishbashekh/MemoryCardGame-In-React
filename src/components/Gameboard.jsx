@@ -1,5 +1,7 @@
 import { Cat, Dog, Grape, Heart } from 'lucide-react'
 import Card from './Card'
+import LevelBtn from './LevelBtn';
+import ResetBtn from './ResetBtn';
 
 const cards = [
   { 
@@ -34,13 +36,24 @@ const Gameboard = () => {
   
 
  
+
   return (
+    <>
+    <div className='absolute top-20'>
+           <LevelBtn />
+    </div>
+    
     <div className='grid grid-cols-4 gap-4'>
-       {paircards.map((card, index)=>(
+       {paircards.map((card)=>(
       
         <Card key={card.id} card={card}/>
        ))}
     </div>
+    <div>
+      <ResetBtn/>
+    </div>
+    </>
+   
   
   )
 }
