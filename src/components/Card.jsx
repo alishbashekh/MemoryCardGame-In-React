@@ -2,10 +2,11 @@
 const Card = ({card}) => {
   const Icon = card.value;
   return (
-    <div className="w-24 h-24 rounded-lg bg-white flex items-center justify-center shadow">
-      <Icon size = {40}/>
+    <div className="w-28 h-40 bg-gradient-to-tl  to-[#5a189a] from-[#10002b] rounded-lg  flex items-center justify-center shadow-lg transition duration-300  shadow-[#5a189a] cursor-pointer"
+    >
+      <Icon size = {45} className="text-[#e7e8ea]"/>
     </div>
   )
 }
 
-export default Card
+export default Card;

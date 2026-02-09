@@ -24,4 +24,4 @@ const Gameboard = () => {
   )
 }
 
-export default Gameboard
+export default Gameboard;
