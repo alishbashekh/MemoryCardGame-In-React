@@ -1,10 +1,12 @@
-import { Cat, Dog, Grape, Heart, Cherry, Star, } from 'lucide-react';
+import {Cat,Dog,Grape,Heart,Cherry,Star} from 'lucide-react';
 import Card from './Card';
 import LevelBtn from './LevelBtn';
 import ResetBtn from './ResetBtn';
 import { useState, useEffect } from 'react';
+import MovesCount from './MovesCount';
+import Bestscore from './Bestscore';
 
-const ICONS = [Cat, Dog, Grape, Heart, Cherry,Star,];
+const ICONS = [Cat,Dog,Grape,Heart,Cherry,Star];
 const LEVELS = {
   easy: 4,
   medium: 7,
@@ -25,10 +27,10 @@ const createCards = (pairs) => {
 };
 
 const Gameboard = () => {
-  
+ 
   const [level, setLevel] = useState('easy');
-  const [gameCards, setGameCards] = useState(createCards(LEVELS.easy)
-  );
+  const [gameCards, setGameCards] = useState(createCards(LEVELS.easy));
+  const [moves, setmoves]=useState(0);
 
   const handleCardFlip = (id) => {
     setGameCards((prevCards) => {
@@ -49,6 +51,7 @@ const Gameboard = () => {
     );
 
     if (flippedCards.length === 2) {
+      setmoves(prev=>prev+1)
       const [first, second] = flippedCards;
 
       if (first.icon === second.icon) {
@@ -72,16 +75,33 @@ const Gameboard = () => {
       }
     }
   }, [gameCards]);
+  useEffect(() => {
+  const allMatched = gameCards.length > 0 &&
+    gameCards.every(card => card.isMatched);
+
+  if (allMatched) {
+    const bestScore = localStorage.getItem("bestScore");
+
+    if (!bestScore || moves < Number(bestScore)) {
+      localStorage.setItem("bestScore", moves);
+    }
+  }
+}, [gameCards, moves]);
   const resetGame = () => {
     setGameCards(createCards(LEVELS[level]));
+    setmoves(0);
   };
   const changeLevel = (newLevel) => {
     setLevel(newLevel);
     setGameCards(createCards(LEVELS[newLevel]));
+    setmoves(0);
   };
+
 
   return (
     <>
+    <Bestscore />
+    <MovesCount moves={moves}/>
       <div className="absolute top-20">
         <LevelBtn onLevelChange={changeLevel} />
       </div>
