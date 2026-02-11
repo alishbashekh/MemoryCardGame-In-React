@@ -5,7 +5,7 @@ import ResetBtn from "./ResetBtn";
 import { useState, useEffect } from "react";
 import MovesCount from "./MovesCount";
 import Bestscore from "./Bestscore";
-import Sound from "./Sound";
+
 
 const ICONS = [Cat, Dog, Grape, Heart, Cherry, Star];
 const LEVELS = {
@@ -30,10 +30,10 @@ const Gameboard = () => {
   const [level, setLevel] = useState("easy");
   const [gameCards, setGameCards] = useState(createCards(LEVELS.easy));
   const [moves, setmoves] = useState(0);
-  const [soundTrigger, setSoundTrigger] = useState(null);
+
 
   const handleCardFlip = (id) => {
-    setSoundTrigger("flip");
+  
     setGameCards((prevCards) => {
       const flippedCards = prevCards.filter(
         (card) => card.isFlipped && !card.isMatched,
@@ -54,7 +54,7 @@ const Gameboard = () => {
       const [first, second] = flippedCards;
 
       if (first.icon === second.icon) {
-        setSoundTrigger("match");
+        
         setGameCards((prevCards) =>
           prevCards.map((card) =>
             card.id === first.id || card.id === second.id
@@ -64,7 +64,7 @@ const Gameboard = () => {
         );
       } else {
         setTimeout(() => {
-          setSoundTrigger("wrong");
+         
           setGameCards((prevCards) =>
             prevCards.map((card) =>
               card.id === first.id || card.id === second.id
@@ -76,19 +76,7 @@ const Gameboard = () => {
       }
     }
   }, [gameCards]);
-  useEffect(() => {
-    const allMatched =
-      gameCards.length > 0 && gameCards.every((card) => card.isMatched);
 
-    if (allMatched) {
-      setSoundTrigger("win");
-      const bestScore = localStorage.getItem("bestScore");
-
-      if (!bestScore || moves < Number(bestScore)) {
-        localStorage.setItem("bestScore", moves);
-      }
-    }
-  }, [gameCards, moves]);
   const resetGame = () => {
     setGameCards(createCards(LEVELS[level]));
     setmoves(0);
@@ -102,14 +90,14 @@ const Gameboard = () => {
   return (
     <>
       <div className=" max-w-xl px-4 sm:px-6 py-6 sm:py-8 rounded-xl bg-[#b6b5b55c]">
-        <div className="mt-20 flex justify-between">
-          <div>
+        <div className=" flex justify-between md:flex-row flex-col">
+          <div className="order-2 md:order-1">
             <MovesCount moves={moves} />
           </div>
-          <div>
+          <div className="md:order-2 order-3">
             <LevelBtn onLevelChange={changeLevel} />
           </div>
-          <div>
+          <div className="md:order-3 order-2">
             <Bestscore />
           </div>
         </div>
