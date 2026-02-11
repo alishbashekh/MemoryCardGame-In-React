@@ -1,17 +1,17 @@
-import {Cat,Dog,Grape,Heart,Cherry,Star} from 'lucide-react';
-import Card from './Card';
-import LevelBtn from './LevelBtn';
-import ResetBtn from './ResetBtn';
-import { useState, useEffect } from 'react';
-import MovesCount from './MovesCount';
-import Bestscore from './Bestscore';
+import { Cat, Dog, Grape, Heart, Cherry, Star } from "lucide-react";
+import Card from "./Card";
+import LevelBtn from "./LevelBtn";
+import ResetBtn from "./ResetBtn";
+import { useState, useEffect } from "react";
+import MovesCount from "./MovesCount";
+import Bestscore from "./Bestscore";
+import Sound from "./Sound";
 
-const ICONS = [Cat,Dog,Grape,Heart,Cherry,Star];
+const ICONS = [Cat, Dog, Grape, Heart, Cherry, Star];
 const LEVELS = {
   easy: 4,
   medium: 7,
 };
-
 
 const createCards = (pairs) => {
   const selectedIcons = ICONS.slice(0, pairs);
@@ -27,66 +27,68 @@ const createCards = (pairs) => {
 };
 
 const Gameboard = () => {
- 
-  const [level, setLevel] = useState('easy');
+  const [level, setLevel] = useState("easy");
   const [gameCards, setGameCards] = useState(createCards(LEVELS.easy));
-  const [moves, setmoves]=useState(0);
+  const [moves, setmoves] = useState(0);
+  const [soundTrigger, setSoundTrigger] = useState(null);
 
   const handleCardFlip = (id) => {
+    setSoundTrigger("flip");
     setGameCards((prevCards) => {
       const flippedCards = prevCards.filter(
-        (card) => card.isFlipped && !card.isMatched
+        (card) => card.isFlipped && !card.isMatched,
       );
       if (flippedCards.length === 2) return prevCards;
       return prevCards.map((card) =>
-        card.id === id && !card.isMatched
-          ? { ...card, isFlipped: true }
-          : card
+        card.id === id && !card.isMatched ? { ...card, isFlipped: true } : card,
       );
     });
   };
   useEffect(() => {
     const flippedCards = gameCards.filter(
-      (card) => card.isFlipped && !card.isMatched
+      (card) => card.isFlipped && !card.isMatched,
     );
 
     if (flippedCards.length === 2) {
-      setmoves(prev=>prev+1)
+      setmoves((prev) => prev + 1);
       const [first, second] = flippedCards;
 
       if (first.icon === second.icon) {
+        setSoundTrigger("match");
         setGameCards((prevCards) =>
           prevCards.map((card) =>
             card.id === first.id || card.id === second.id
               ? { ...card, isMatched: true }
-              : card
-          )
+              : card,
+          ),
         );
       } else {
         setTimeout(() => {
+          setSoundTrigger("wrong");
           setGameCards((prevCards) =>
             prevCards.map((card) =>
               card.id === first.id || card.id === second.id
                 ? { ...card, isFlipped: false }
-                : card
-            )
+                : card,
+            ),
           );
         }, 1000);
       }
     }
   }, [gameCards]);
   useEffect(() => {
-  const allMatched = gameCards.length > 0 &&
-    gameCards.every(card => card.isMatched);
+    const allMatched =
+      gameCards.length > 0 && gameCards.every((card) => card.isMatched);
 
-  if (allMatched) {
-    const bestScore = localStorage.getItem("bestScore");
+    if (allMatched) {
+      setSoundTrigger("win");
+      const bestScore = localStorage.getItem("bestScore");
 
-    if (!bestScore || moves < Number(bestScore)) {
-      localStorage.setItem("bestScore", moves);
+      if (!bestScore || moves < Number(bestScore)) {
+        localStorage.setItem("bestScore", moves);
+      }
     }
-  }
-}, [gameCards, moves]);
+  }, [gameCards, moves]);
   const resetGame = () => {
     setGameCards(createCards(LEVELS[level]));
     setmoves(0);
@@ -97,38 +99,31 @@ const Gameboard = () => {
     setmoves(0);
   };
 
-
   return (
-    <div className="relative w-full max-w-xl px-4 sm:px-6 py-6 sm:py-8 bg-[#cdc8c860] rounded-xl">
+    <>
+      <div className="relative w-full max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
+        <Bestscore />
+        <MovesCount moves={moves} />
 
+        <div className="mt-20 flex justify-center">
+          <LevelBtn onLevelChange={changeLevel} />
+        </div>
 
-      <div className="flex justify-between md:flex-row flex-col">
-          <div  className="md:order-1 order-1">
-           <MovesCount moves={moves} />
-          </div>
-          <div  className="md:order-2 order-3">
-            <LevelBtn onLevelChange={changeLevel} />
-          </div>
-          <div  className="md:order-3 order-2">
-            <Bestscore />
-          </div>
-       
+        <div className="mt-8 flex gap-2 flex-wrap justify-center ">
+          {gameCards.map((card) => (
+            <Card
+              key={card.id}
+              card={card}
+              onClick={() => handleCardFlip(card.id)}
+            />
+          ))}
+        </div>
+
+        <div className="flex justify-center">
+          <ResetBtn onReset={resetGame} />
+        </div>
       </div>
-
-      <div className="mt-8 flex gap-2 flex-wrap justify-center ">
-        {gameCards.map((card) => (
-          <Card
-            key={card.id}
-            card={card}
-            onClick={() => handleCardFlip(card.id)}
-          />
-        ))}
-      </div>
-
-      <div className="flex justify-center">
-        <ResetBtn onReset={resetGame} />
-      </div>
-    </div>
+    </>
   );
 };
 
