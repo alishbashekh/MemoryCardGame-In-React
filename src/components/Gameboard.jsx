@@ -5,6 +5,7 @@ import ResetBtn from './ResetBtn';
 import { useState, useEffect } from 'react';
 import MovesCount from './MovesCount';
 import Bestscore from './Bestscore';
+import Sound from './Sound';
 
 const ICONS = [Cat,Dog,Grape,Heart,Cherry,Star];
 const LEVELS = {
@@ -31,8 +32,10 @@ const Gameboard = () => {
   const [level, setLevel] = useState('easy');
   const [gameCards, setGameCards] = useState(createCards(LEVELS.easy));
   const [moves, setmoves]=useState(0);
+  const [soundTrigger, setSoundTrigger] = useState(null);
 
   const handleCardFlip = (id) => {
+    setSoundTrigger("flip");
     setGameCards((prevCards) => {
       const flippedCards = prevCards.filter(
         (card) => card.isFlipped && !card.isMatched
@@ -55,6 +58,7 @@ const Gameboard = () => {
       const [first, second] = flippedCards;
 
       if (first.icon === second.icon) {
+         setSoundTrigger("match"); 
         setGameCards((prevCards) =>
           prevCards.map((card) =>
             card.id === first.id || card.id === second.id
@@ -64,6 +68,7 @@ const Gameboard = () => {
         );
       } else {
         setTimeout(() => {
+           setSoundTrigger("wrong"); 
           setGameCards((prevCards) =>
             prevCards.map((card) =>
               card.id === first.id || card.id === second.id
@@ -80,6 +85,7 @@ const Gameboard = () => {
     gameCards.every(card => card.isMatched);
 
   if (allMatched) {
+     setSoundTrigger("win"); 
     const bestScore = localStorage.getItem("bestScore");
 
     if (!bestScore || moves < Number(bestScore)) {
@@ -99,6 +105,8 @@ const Gameboard = () => {
 
 
   return (
+    <>
+    <Sound trigger={soundTrigger}/>
     <div className="relative w-full max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
       <Bestscore />
       <MovesCount moves={moves} />
@@ -121,6 +129,7 @@ const Gameboard = () => {
         <ResetBtn onReset={resetGame} />
       </div>
     </div>
+    </>
   );
 };
 
