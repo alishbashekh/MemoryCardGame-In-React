@@ -99,14 +99,15 @@ const Gameboard = () => {
 
 
   return (
-    <>
-    <Bestscore />
-    <MovesCount moves={moves}/>
-      <div className="absolute top-20">
+    <div className="relative w-full max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
+      <Bestscore />
+      <MovesCount moves={moves} />
+
+      <div className="mt-20 flex justify-center">
         <LevelBtn onLevelChange={changeLevel} />
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 justify-items-center">
         {gameCards.map((card) => (
           <Card
             key={card.id}
@@ -116,10 +117,10 @@ const Gameboard = () => {
         ))}
       </div>
 
-      <div>
+      <div className="flex justify-center">
         <ResetBtn onReset={resetGame} />
       </div>
-    </>
+    </div>
   );
 };
 
