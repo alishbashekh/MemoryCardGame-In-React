@@ -101,12 +101,17 @@ const Gameboard = () => {
 
   return (
     <>
-      <div className="relative w-full max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
-        <Bestscore />
-        <MovesCount moves={moves} />
-
-        <div className="mt-20 flex justify-center">
-          <LevelBtn onLevelChange={changeLevel} />
+      <div className=" max-w-xl px-4 sm:px-6 py-6 sm:py-8 rounded-xl bg-[#b6b5b55c]">
+        <div className="mt-20 flex justify-between">
+          <div>
+            <MovesCount moves={moves} />
+          </div>
+          <div>
+            <LevelBtn onLevelChange={changeLevel} />
+          </div>
+          <div>
+            <Bestscore />
+          </div>
         </div>
 
         <div className="mt-8 flex gap-2 flex-wrap justify-center ">
