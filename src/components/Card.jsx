@@ -4,7 +4,7 @@ const Card = ({ card, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="card-3d w-24 h-32 sm:w-28 sm:h-40 md:w-32 md:h-44 cursor-pointer"
+      className="card-3d w-28 h-20 sm:w-28 sm:h-20 md:w-30 md:h-20 cursor-pointer"
     >
       <div
         className={`card-inner ${card.isFlipped ? "is-flipped" : ""}`}

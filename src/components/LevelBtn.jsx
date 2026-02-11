@@ -1,8 +1,9 @@
 const LevelBtn = ({ onLevelChange }) => {
   return (
-    <select
+    <div className="">
+        <select
       onChange={(e) => onLevelChange(e.target.value)}
-      className="px-4 py-2 rounded-xl bg-[#d1105a] mt-6 cursor-pointer text-white shadow-[0px_0px_10px_#ffffff]"
+      className=" px-4 py-4 rounded-xl bg-[#d1105a] my-2 w-full cursor-pointer text-white shadow-[0px_0px_10px_#ffffff]"
     >
       <option value="" disabled>
         Select Level
@@ -20,6 +21,8 @@ const LevelBtn = ({ onLevelChange }) => {
         Hard
       </option>
     </select>
+    </div>
+   
   );
 };
 
